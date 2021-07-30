@@ -1,6 +1,8 @@
-use std::fs;
-use std::env;
-use std::error::Error;
+use std::{
+    fs,
+    env,
+    error::Error,
+};
 
 // 配置解析
 pub struct Config {

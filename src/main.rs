@@ -1,5 +1,7 @@
-use std::env;
-use std::process;
+use std::{
+    env,
+    process,
+};
 
 use minigrep::Config;
 
