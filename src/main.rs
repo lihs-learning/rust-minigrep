@@ -1,32 +1,38 @@
 use std::env;
 use std::fs;
+use std::process;
 
 fn main() {
     let args:Vec<String> = env::args().collect();
 
-    let config = Config::new(&args);
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("在读取参数时发生了错误：{}", err);
+        process::exit(1);
+    });
 
-    println!("query: {}, filename: {}", config.query, config.filename);
+    println!("要查询的字符串为：{}", config.query);
+    println!("被查询的文件为：{}", config.filename);
 
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.filename)?;
 
-    println!("With text:\n{}", contents);
+    println!("文件内容为：\n{}", contents);
 }
 
+// 配置解析
 struct Config {
     query: String,
     filename: String,
 }
 
 impl Config {
-    fn new(args: &[String]) -> Config {
-        let query = &args[1];
-        let filename = &args[2];
-
-        Config{
-            query: query.clone(),
-            filename: filename.clone(),
+    fn new(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("缺少参数")
         }
+
+        let query = args[1].clone();
+        let filename = args[2].clone();
+
+        Ok(Config{ query, filename })
     }
 }
