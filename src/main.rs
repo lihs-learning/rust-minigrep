@@ -9,7 +9,7 @@ fn main() {
     let args:Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("在读取参数时发生了错误：{}", err);
+        eprintln!("在读取参数时发生了错误：{}", err);
         process::exit(1);
     });
 
@@ -17,7 +17,7 @@ fn main() {
     println!("被查询的文件为：{}", config.filename);
 
     if let Err(e) = minigrep::run(config) {
-        println!("程序错误: {}", e);
+        eprintln!("程序错误: {}", e);
 
         process::exit(1);
     }
